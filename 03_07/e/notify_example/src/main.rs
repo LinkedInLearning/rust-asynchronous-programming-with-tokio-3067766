@@ -1,4 +1,5 @@
 use std::sync::Arc;
+
 use tokio::sync::Notify;
 use tokio::time::{sleep, Duration};
 
@@ -7,10 +8,10 @@ async fn order_package(package_delivered: Arc<Notify>) {
     println!("Find package in warehouse");
 
     sleep(Duration::from_secs(2)).await;
-    println!("Ship pacakge");
+    println!("Ship package");
 
     sleep(Duration::from_secs(2)).await;
-    println!("package has been delivered");
+    println!("Package has been delivered");
     package_delivered.notify_one();
 }
 
@@ -23,11 +24,11 @@ async fn grab_package(package_delivered: Arc<Notify>) {
 
 #[tokio::main]
 async fn main() {
-    let package_notification = Notify::new();
-    let package_delivered = Arc::new(package_notification);
+    let package_delivered = Notify::new();
+    let package_delivered_arc = Arc::new(package_delivered);
 
-    let order_package_handle = tokio::spawn(order_package(package_delivered.clone()));
-    let grab_package_handle = tokio::spawn(grab_package(package_delivered.clone()));
+    let order_package_handle = tokio::spawn(order_package(package_delivered_arc.clone()));
+    let grab_package_handle = tokio::spawn(grab_package(package_delivered_arc.clone()));
 
     order_package_handle.await.unwrap();
     grab_package_handle.await.unwrap();
