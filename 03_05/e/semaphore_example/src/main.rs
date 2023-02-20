@@ -22,12 +22,11 @@ async fn teller(semaphore: Arc<Semaphore>, customer: String) {
 
 #[tokio::main]
 async fn main() {
-    let mut people_handles = Vec::new();
-
     let num_of_tellers = 4;
     let semaphore = Semaphore::new(num_of_tellers);
     let semaphore_arc = Arc::new(semaphore);
 
+    let mut people_handles = Vec::new();
     for num in 0..10 {
         people_handles.push(tokio::spawn(person(
             semaphore_arc.clone(),
