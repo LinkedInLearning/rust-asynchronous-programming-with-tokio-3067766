@@ -27,8 +27,12 @@ async fn main() {
     let package_delivered = Notify::new();
     let package_delivered_arc = Arc::new(package_delivered);
 
-    let order_package_handle = tokio::spawn(order_package(package_delivered_arc.clone()));
-    let grab_package_handle = tokio::spawn(grab_package(package_delivered_arc.clone()));
+    let order_package_handle = tokio::spawn(
+        order_package(package_delivered_arc.clone())
+    );
+    let grab_package_handle = tokio::spawn(
+        grab_package(package_delivered_arc.clone())
+    );
 
     order_package_handle.await.unwrap();
     grab_package_handle.await.unwrap();
