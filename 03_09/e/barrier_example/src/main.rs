@@ -23,7 +23,7 @@ async fn main() {
 
     let notify = Arc::new(Notify::new());
 
-    // To let the first batch through to the barrier
+    // To send the first batch of cans to the barrier
     notify.notify_one();
 
     let mut task_handles = Vec::new();
