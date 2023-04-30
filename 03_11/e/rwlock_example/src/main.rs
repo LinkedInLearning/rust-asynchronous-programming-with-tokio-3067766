@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use tokio::sync::RwLock;
+use tokio::time::{sleep, Duration};
 
 async fn read_from_document(id: i32, document: Arc<RwLock<String>>) {
     let reader = document.read().await;
@@ -29,6 +30,7 @@ async fn main() {
             document.clone(),
             new_string,
         )));
+        sleep(Duration::from_millis(1)).await;
 
         handles.push(tokio::spawn(read_from_document(2, document.clone())));
         handles.push(tokio::spawn(read_from_document(3, document.clone())));
